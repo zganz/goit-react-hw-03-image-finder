@@ -1,7 +1,16 @@
-export const ImageGalleryItem = ({ image }) => {
+export const ImageGalleryItem = ({ image, id }) => {
+  const handleLoad = () => {
+    console.log(id);
+  };
+
   return (
     <li className="ImageGalleryItem">
-      <img className="ImageGalleryItem-image" src={image} alt="" />
+      <img
+        className="ImageGalleryItem-image"
+        onLoad={handleLoad}
+        src={image}
+        alt=""
+      />
     </li>
   );
 };
