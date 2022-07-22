@@ -11,11 +11,11 @@ export class App extends React.Component {
     images: [],
     page: 1,
     searchStr: '',
-    loading: true,
+    loading: false,
   };
 
   handleLoadMore = () => {
-    this.setState({ page: this.state.page + 1 }, this.fetchData);
+    this.setState({ page: this.state.page + 1, loading: true }, this.fetchData);
   };
 
   fetchData = () => {
@@ -30,31 +30,37 @@ export class App extends React.Component {
             return { id, webformatURL, largeImageURL };
           });
         if (result && result.length) {
-          this.setState({ images: [...this.state.images, ...result] });
+          this.setState({
+            images: [...this.state.images, ...result],
+            loading: false,
+          });
         }
       })
       .catch(error => {});
   };
 
   handleSearchSubmit = value => {
-    this.setState({ images: [], page: 1, searchStr: value }, this.fetchData);
+    this.setState(
+      { images: [], page: 1, searchStr: value, loading: true },
+      this.fetchData
+    );
   };
 
   render() {
     return (
       <div className="App">
         <Searchbar handleSearchSubmit={this.handleSearchSubmit} />
-        <Loader />
-        <ImageGallery images={this.state.images} />
-        {this.state.images.length ? (
-          <Button handleClick={this.handleLoadMore} text="Load More" />
-        ) : null}
+        {this.state.loading ? (
+          <Loader />
+        ) : (
+          <>
+            <ImageGallery images={this.state.images} />
+            {this.state.images.length ? (
+              <Button handleClick={this.handleLoadMore} text="Load More" />
+            ) : null}
+          </>
+        )}
       </div>
     );
   }
 }
-
-//  1) map преобразовать в стрелочную ф-ию  использую деструктуризацию
-// 2) при каждом новом запросе обнулять state (асинхронный this.setState({ images: [], page: 1 }, () =>{} ) )
-// 3) Вынести fetch в отдельную функцию fetchData
-// 4) Описать кнопку loadMore

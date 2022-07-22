@@ -1,5 +1,9 @@
 import { TailSpin } from 'react-loader-spinner';
 
 export const Loader = () => {
-  return <TailSpin color="grey" />;
+  return (
+    <div className="Loader">
+      <TailSpin color="#3f51b5" />
+    </div>
+  );
 };
