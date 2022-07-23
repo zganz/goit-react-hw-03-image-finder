@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 export const Modal = ({ modalImgUrl, toggleModal }) => {
   return (
     <div className="Overlay" onClick={toggleModal}>
@@ -6,4 +7,9 @@ export const Modal = ({ modalImgUrl, toggleModal }) => {
       </div>
     </div>
   );
+};
+
+Modal.propTypes = {
+  modalImgUrl: PropTypes.string.isRequired,
+  toggleModal: PropTypes.func.isRequired,
 };

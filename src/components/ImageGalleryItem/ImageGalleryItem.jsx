@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 export const ImageGalleryItem = ({ image, toggleModal, id }) => {
   return (
     <li className="ImageGalleryItem">
@@ -9,4 +10,10 @@ export const ImageGalleryItem = ({ image, toggleModal, id }) => {
       />
     </li>
   );
+};
+
+ImageGalleryItem.propTypes = {
+  image: PropTypes.string.isRequired,
+  id: PropTypes.number.isRequired,
+  toggleModal: PropTypes.func.isRequired,
 };
