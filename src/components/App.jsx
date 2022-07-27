@@ -29,28 +29,28 @@ export class App extends React.Component {
     this.setState({ showModal: !this.state.showModal, modalImgUrl });
   };
 
-  componentDidMount() {
-    window.addEventListener('keydown', evt => {
-      if (evt.code === 'Escape' && this.state.showModal) {
-        // console.log('test');
-        this.toggleModal();
-      }
-    });
+  componentDidUpdate(prevProps, prevState) {
+    if (
+      prevState.searchStr !== this.state.searchStr ||
+      prevState.page !== this.state.page
+    ) {
+      this.fetchImages();
+    }
   }
 
   handleLoadMore = () => {
-    this.setState(
-      { page: this.state.page + 1, loading: true },
-      this.fetchImages
-    );
+    this.setState({ page: this.state.page + 1, loading: true });
   };
 
   fetchImages = async () => {
     const images = await getImages(this.state.searchStr, this.state.page);
     if (images) {
-      this.setState({
-        images: [...this.state.images, ...images],
-        loading: false,
+      this.setState(prevState => {
+        return {
+          ...prevState,
+          images: [...prevState.images, ...images],
+          loading: false,
+        };
       });
     } else {
       this.setState({
@@ -60,33 +60,30 @@ export class App extends React.Component {
   };
 
   handleSearchSubmit = value => {
-    this.setState(
-      { images: [], page: 1, searchStr: value, loading: true },
-      this.fetchImages
-    );
+    this.setState({ images: [], page: 1, searchStr: value, loading: true });
   };
 
   render() {
     return (
       <div className="App">
         <Searchbar handleSearchSubmit={this.handleSearchSubmit} />
-        {this.state.loading ? (
-          <Loader />
-        ) : (
+        {this.state.loading ? <Loader /> : null}
+
+        {this.state.images.length ? (
           <>
             <ImageGallery
               images={this.state.images}
               toggleModal={this.toggleModal}
             />
-            {this.state.images.length ? (
-              <Button handleClick={this.handleLoadMore} text="Load More" />
-            ) : null}
+            <Button handleClick={this.handleLoadMore} text="Load More" />
           </>
-        )}
+        ) : null}
+
         {this.state.showModal && (
           <Modal
             modalImgUrl={this.state.modalImgUrl}
             toggleModal={this.toggleModal}
+            showModal={this.state.showModal}
           />
         )}
       </div>

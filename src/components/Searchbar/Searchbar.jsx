@@ -19,6 +19,7 @@ export const Searchbar = ({ handleSearchSubmit }) => {
           autoFocus
           placeholder="Search images and photos"
           name="search"
+          required
         />
       </form>
     </header>
