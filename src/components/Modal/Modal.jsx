@@ -2,12 +2,19 @@ import React from 'react';
 import PropTypes from 'prop-types';
 export class Modal extends React.Component {
   componentDidMount() {
-    window.addEventListener('keydown', evt => {
-      if (evt.code === 'Escape' && this.props.showModal) {
-        this.props.toggleModal();
-      }
-    });
+    console.log('didmount');
+    window.addEventListener('keydown', this.handleKeyDown);
   }
+  componentWillUnmount() {
+    console.log('unmount');
+    window.removeEventListener('keydown', this.handleKeyDown);
+  }
+
+  handleKeyDown = evt => {
+    if (evt.code === 'Escape' && this.props.showModal) {
+      this.props.toggleModal();
+    }
+  };
 
   render() {
     return (
